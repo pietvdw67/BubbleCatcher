@@ -1,0 +1,3 @@
+class GameState:
+
+    running = True
