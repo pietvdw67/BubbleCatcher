@@ -1,0 +1,2 @@
+Tile Width = 129
+Tile height = 129

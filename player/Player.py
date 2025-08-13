@@ -3,7 +3,6 @@ import os
 
 from constants import Constants
 from player.player_base import PlayerBase
-from utils.assets_utils import AssetsUtils
 from utils.image_utils import ImageUtils
 
 

@@ -1,7 +1,9 @@
 import pygame
+import os
 
 from player.Player import Player
-
+from constants import Constants
+from utils.image_utils import ImageUtils
 
 class Game:
     def __init__(self, screen, game_state):
@@ -9,17 +11,36 @@ class Game:
         self.game_state = game_state
         self.clock = pygame.time.Clock()
         self.sprite_groups = {
-            "players": pygame.sprite.Group()
+            "players": pygame.sprite.Group(),
+            "ground": pygame.sprite.Group()
         }
 
         self.players = []
-        self.players.append(Player("VirtualGuy", 100, 100))
-        self.players.append(Player("NinjaFrog", 400, 100))
-        self.players.append(Player("PinkMan", 100, 300))
-
+        self.players.append(Player("VirtualGuy", 100, Constants.PLAYER_GROUND_HEIGHT))
         self.sprite_groups["players"].add(self.players[0])
-        self.sprite_groups["players"].add(self.players[1])
-        self.sprite_groups["players"].add(self.players[2])
+        self.background_image = None
+        self.build_background_image()
+
+    def build_background_image(self):
+        self.background_image = pygame.Surface((self.screen.get_width(), self.screen.get_height()))
+        background_tile = pygame.image.load(os.path.join("assets", "background", "Blue.png"))
+        rows = Constants.WIDTH // background_tile.get_width() + 1
+        cols = Constants.HEIGHT // background_tile.get_height() + 10
+        for row in range(rows):
+            for col in range(cols):
+                self.background_image.blit(background_tile, (col * background_tile.get_width(), row * background_tile.get_height()))
+
+    def draw_background(self, screen):
+
+        screen.blit(self.background_image, (0,0))
+        image_count = Constants.WIDTH // 129 + 1
+        ground_image_path = os.path.join("assets", "terrain", "terrain.png")
+        image = ImageUtils.get_image_from_sprite_sheet(ground_image_path,129,0,129*2-1,129)
+
+        for i in range(image_count):
+            screen.blit(image, (i * 128, Constants.HEIGHT - 129))
+
+
 
     def handle_events(self):
 
@@ -32,32 +53,17 @@ class Game:
 
         self.players[0].vel[0] = 0
         vel = self.players[0].vel
-        self.players[1].vel[0] = 0
-        vel = self.players[1].vel
-        self.players[2].vel[0] = 0
-        vel = self.players[2].vel
+
         if keys[pygame.K_d]:
             self.players[0].direction = "right"
             self.players[0].vel[0] = 1
         if keys[pygame.K_a]:
             self.players[0].direction = "left"
             self.players[0].vel[0] = -1
-        if keys[pygame.K_RIGHT]:
-            self.players[1].direction = "right"
-            self.players[1].vel[0] = 1
-        if keys[pygame.K_LEFT]:
-            self.players[1].direction = "left"
-            self.players[1].vel[0] = -1
-        if keys[pygame.K_l]:
-            self.players[2].direction = "right"
-            self.players[2].vel[0] = 1
-        if keys[pygame.K_j]:
-            self.players[2].direction = "left"
-            self.players[2].vel[0] = -1
-
 
     def draw(self):
         self.screen.fill((0, 0, 0))
+        self.draw_background(self.screen)
 
         self.sprite_groups["players"].draw(self.screen)
 
