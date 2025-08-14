@@ -12,7 +12,6 @@ class Game:
         self.clock = pygame.time.Clock()
         self.sprite_groups = {
             "players": pygame.sprite.Group(),
-            "ground": pygame.sprite.Group()
         }
 
         self.players = []
@@ -32,15 +31,16 @@ class Game:
 
     def draw_background(self, screen):
 
+        # Draw the background image created from individual tiles
         screen.blit(self.background_image, (0,0))
-        image_count = Constants.WIDTH // 129 + 1
+
+        # Draw the terrain floor
+        image_count = Constants.WIDTH // Constants.TILE_SIZE + 1
         ground_image_path = os.path.join("assets", "terrain", "terrain.png")
-        image = ImageUtils.get_image_from_sprite_sheet(ground_image_path,129,0,129*2-1,129)
+        image = ImageUtils.get_image_from_sprite_sheet(ground_image_path, Constants.TILE_SIZE,0, Constants.TILE_SIZE*2, Constants.TILE_SIZE)
 
         for i in range(image_count):
-            screen.blit(image, (i * 128, Constants.HEIGHT - 129))
-
-
+            screen.blit(image, (i * image.get_width(), Constants.HEIGHT - image.get_height()))
 
     def handle_events(self):
 

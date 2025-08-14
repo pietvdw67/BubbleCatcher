@@ -6,9 +6,9 @@ pygame.init()
 
 class ImagePacker:
 
-    SOURCE_FOLDER = 'D:/DEV/Python/learn/gamedev/BubbleCatcher/assets/tmpinput'
-    TARGET_FILE = '/assets/tmpoutput/terrain.png'
-    OUTPUT_COL = 5
+    SOURCE_FOLDER = 'C:/Users/f3953289/Downloads/FreeTileset/png/Tiles'
+    TARGET_FILE = 'C:/Users/f3953289/Downloads/terrain.png'
+    OUTPUT_COL = 4
     OUTPUT_ROW = 5
 
     def __init__(self):
