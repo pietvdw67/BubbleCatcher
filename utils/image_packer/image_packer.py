@@ -14,7 +14,10 @@ class ImagePacker:
         screen_width, screen_height = 800, 600
         screen = pygame.display.set_mode((screen_width, screen_height))
 
-    def pack(self, source_folder, target_file, cols, rows):
+    def pack(self, source_folder, target_file, cols_text, rows_text):
+        cols = int(cols_text)
+        rows = int(rows_text)
+
         entries = os.listdir(source_folder)
         images_list = []
         max_height = 0
@@ -37,7 +40,9 @@ class ImagePacker:
                     image_target.blit(images_list[current_index], (col * max_height, row*max_height))
                     current_index += 1
 
-        pygame.image.save(image_target, ImagePacker.TARGET_FILE)
+        pygame.image.save(image_target, target_file)
+
+        pygame.quit()
         return f'Output file created, tile size is Width: {max_width}, Height: {max_height}'
 
 
