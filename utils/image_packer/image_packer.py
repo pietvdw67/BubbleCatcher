@@ -1,7 +1,9 @@
 import pygame
 import os
+import math
 
 pygame.init()
+
 
 class ImagePacker:
 
@@ -44,6 +46,17 @@ class ImagePacker:
 
         pygame.quit()
         return f'Output file created, tile size is Width: {max_width}, Height: {max_height}'
+
+    @staticmethod
+    def get_suggested_layout(amount_of_images: int) -> ():
+
+        if amount_of_images <= 0:
+            return 0, 0
+
+        columns = math.ceil(math.sqrt(amount_of_images))
+        rows = math.ceil(amount_of_images / columns)
+
+        return columns, rows
 
 
 if __name__ == '__main__':

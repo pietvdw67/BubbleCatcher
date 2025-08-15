@@ -1,4 +1,5 @@
 import sys
+import os
 from PyQt6.QtWidgets import (
     QApplication,
     QMainWindow,
@@ -41,6 +42,17 @@ class ImagePackerUI(QMainWindow):
         horizontal_container.addWidget(label)
         horizontal_container.addWidget(self.edit_source)
         horizontal_container.addWidget(self.btn_get_source)
+        main_layout.addLayout(horizontal_container)
+
+        horizontal_container = QHBoxLayout()
+        label = QLabel("Amount of files")
+        label.setFixedWidth(ImagePackerUI.LABEL_WIDTH)
+        self.lbl_image_count = QLabel("0")
+        self.lbl_image_count.setFixedWidth(ImagePackerUI.LABEL_WIDTH)
+        spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        horizontal_container.addWidget(label)
+        horizontal_container.addWidget(self.lbl_image_count)
+        horizontal_container.addItem(spacer)
         main_layout.addLayout(horizontal_container)
 
         horizontal_container = QHBoxLayout()
@@ -93,11 +105,17 @@ class ImagePackerUI(QMainWindow):
 
     def btn_get_source_clicked(self):
         file_dialog = QFileDialog()
-        file_dialog.setFileMode(QFileDialog.FileMode.Directory)
+        #file_dialog.setFileMode(QFileDialog.FileMode.Directory)
         clicked_button = file_dialog.exec()
         if clicked_button:
             selected_files = file_dialog.selectedFiles()
             self.edit_source.setText(selected_files[0])
+            entries = os.listdir(selected_files[0])
+            self.lbl_image_count.setText(str(len(entries)))
+            cols, rows = ImagePacker.get_suggested_layout(len(entries))
+            self.edit_cols.setText(str(cols))
+            self.edit_rows.setText(str(rows))
+
 
     def btn_set_target_clicked(self):
         file_dialog = QFileDialog()
