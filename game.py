@@ -6,6 +6,7 @@ from players.player_constants import PlayerConstants
 from constants import Constants
 from utils.image_utils import ImageUtils
 from platforms.platform import Platform
+from balls.ball import Ball
 
 
 class Game:
@@ -15,7 +16,8 @@ class Game:
         self.clock = pygame.time.Clock()
         self.sprite_groups = {
             "players": pygame.sprite.Group(),
-            "platforms": pygame.sprite.Group()
+            "platforms": pygame.sprite.Group(),
+            "balls": pygame.sprite.Group()
         }
 
         self.players = []
@@ -25,9 +27,9 @@ class Game:
         self.build_background_image()
         self.build_platforms()
 
-
-
-
+        self.balls = []
+        self.balls.append(Ball(pygame.math.Vector2(Constants.WIDTH //2 - 100, 50),"blue"))
+        self.sprite_groups["balls"].add(self.balls[0])
 
 
     def build_background_image(self):
@@ -79,6 +81,7 @@ class Game:
 
         self.sprite_groups["platforms"].draw(self.screen)
         self.sprite_groups["players"].draw(self.screen)
+        self.sprite_groups["balls"].draw(self.screen)
 
         pygame.display.flip()
 
@@ -93,6 +96,7 @@ class Game:
 
             self.sprite_groups["players"].update()
             self.sprite_groups["platforms"].update()
+            self.sprite_groups["balls"].update()
 
             for player in self.players:
                 hits = pygame.sprite.spritecollide(player, self.sprite_groups["platforms"], False)

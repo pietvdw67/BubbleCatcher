@@ -1,7 +1,7 @@
 import pygame
 
 from players.player_constants import PlayerConstants
-
+from constants import Constants
 
 class PlayerBase(pygame.sprite.Sprite):
 
@@ -58,6 +58,13 @@ class PlayerBase(pygame.sprite.Sprite):
         if self.position.y > PlayerConstants.PLAYER_GROUND_HEIGHT:
             self.position.y = PlayerConstants.PLAYER_GROUND_HEIGHT
             self.on_ground = True
+
+        if self.position.x < 0:
+            self.position.x = 0
+
+        if self.image is not None:
+            if self.position.x + self.image.get_width() > Constants.WIDTH-1:
+                self.position.x = Constants.WIDTH-1 - self.image.get_width()
 
     def jump(self):
         if self.on_ground:
