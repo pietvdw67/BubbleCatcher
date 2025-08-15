@@ -1,9 +1,12 @@
 import pygame
 import os
 
-from player.Player import Player
+from players.player import Player
+from players.player_constants import PlayerConstants
 from constants import Constants
 from utils.image_utils import ImageUtils
+from platforms.platform import Platform
+
 
 class Game:
     def __init__(self, screen, game_state):
@@ -12,13 +15,25 @@ class Game:
         self.clock = pygame.time.Clock()
         self.sprite_groups = {
             "players": pygame.sprite.Group(),
+            "platforms": pygame.sprite.Group(),
         }
 
         self.players = []
-        self.players.append(Player("VirtualGuy", 100, Constants.PLAYER_GROUND_HEIGHT))
+        self.players.append(Player("VirtualGuy", pygame.math.Vector2(100, PlayerConstants.PLAYER_GROUND_HEIGHT)))
         self.sprite_groups["players"].add(self.players[0])
         self.background_image = None
         self.build_background_image()
+
+        platform = Platform(pygame.math.Vector2(400, 450), 4)
+        platform.set_image(
+            os.path.join("assets", "terrain", "terrain.png"),
+            128, 128,
+            pygame.math.Vector2(0, 384),
+            pygame.math.Vector2(128, 384),
+            pygame.math.Vector2(256, 384),
+            0.5)
+
+        self.sprite_groups["platforms"].add(platform)
 
     def build_background_image(self):
         self.background_image = pygame.Surface((self.screen.get_width(), self.screen.get_height()))
@@ -48,22 +63,26 @@ class Game:
             if event.type == pygame.QUIT:
                 self.game_state.running = False
 
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    self.players[0].jump()
+
     def handle_keys(self):
         keys = pygame.key.get_pressed()
 
-        self.players[0].vel[0] = 0
-        vel = self.players[0].vel
+        for player in self.players:
+            player.acceleration.x = 0
 
         if keys[pygame.K_d]:
-            self.players[0].direction = "right"
-            self.players[0].vel[0] = 1
+            self.players[0].acceleration.x = PlayerConstants.PLAYER_ACCELERATION
         if keys[pygame.K_a]:
-            self.players[0].direction = "left"
-            self.players[0].vel[0] = -1
+            self.players[0].acceleration.x = -PlayerConstants.PLAYER_ACCELERATION
 
     def draw(self):
         self.screen.fill((0, 0, 0))
         self.draw_background(self.screen)
+
+        self.sprite_groups["platforms"].draw(self.screen)
 
         self.sprite_groups["players"].draw(self.screen)
 

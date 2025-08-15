@@ -1,19 +1,23 @@
 import pygame
 
+from players.player_constants import PlayerConstants
+
 
 class PlayerBase(pygame.sprite.Sprite):
 
-    def __init__(self, name, x_pos, y_pos):
+    def __init__(self, name, position: pygame.math.Vector2) -> None:
 
         pygame.sprite.Sprite.__init__(self)
 
         self.name = name
-        self.x_pos = x_pos
-        self.y_pos = y_pos
-        self.vel = pygame.math.Vector2(0, 0)
-        self.speed = 200
+        self.position = position
+        self.acceleration = pygame.math.Vector2(0, 0)
+        self.velocity = pygame.math.Vector2(0, 0)
+
         self.health = 100
         self.direction = "right"
+        self.on_ground = False
+
         self.rect = None
         self.image = None
         self.animations = {}
@@ -30,18 +34,31 @@ class PlayerBase(pygame.sprite.Sprite):
 
         self.image = self.animations[self._animation_active][self.animation_frame_index]
         self.rect = self.image.get_rect()
-        self.rect.x = self.x_pos
-        self.rect.y = self.y_pos
+        self.rect.x = self.position.x
+        self.rect.y = self.position.y
 
     def move(self, dt):
 
-        if self.vel.x > 0:
+        if self.acceleration.x > 0:
             self.direction = "right"
-        if self.vel.x < 0:
+        if self.acceleration.x < 0:
             self.direction = "left"
 
-        self.x_pos += self.vel[0] * self.speed * dt
-        self.y_pos += self.vel[1] * self.speed * dt
+        self.acceleration.y = PlayerConstants.PLAYER_GRAVITY
+
+        self.acceleration.x += self.velocity.x * PlayerConstants.PLAYER_FRICTION
+        self.velocity += self.acceleration
+        self.position += self.velocity
+
+        # Boundaries
+        if self.position.y > PlayerConstants.PLAYER_GROUND_HEIGHT:
+            self.position.y = PlayerConstants.PLAYER_GROUND_HEIGHT
+            self.on_ground = True
+
+    def jump(self):
+        if self.on_ground:
+            self.velocity.y = PlayerConstants.PLAYER_JUMP_STRENGTH
+            self.on_ground = False
 
     def set_animation_active(self, active_name):
         if not self._animation_active_previous:
@@ -57,6 +74,9 @@ class PlayerBase(pygame.sprite.Sprite):
 
 
     def _set_animation_frame(self):
+
+        if self.animations_delays == 0:
+            return 0
 
         self._animation_delay_count += 1
         if self._animation_delay_count < self.animations_delays[self._animation_active]:
