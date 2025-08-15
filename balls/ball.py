@@ -27,7 +27,7 @@ class Ball(pygame.sprite.Sprite):
         #                                random.choice([10, BallConstants.BALL_SPEED]))
 
         vel_x = random.choice([-BallConstants.BALL_SPEED, BallConstants.BALL_SPEED])
-        vel_y = BallConstants.BALL_SPEED
+        vel_y = random.choice([-BallConstants.BALL_SPEED, BallConstants.BALL_SPEED])
         self.velocity = pygame.math.Vector2(vel_x, vel_y)
 
         self.load_animations(color)
@@ -38,7 +38,9 @@ class Ball(pygame.sprite.Sprite):
         image_path = os.path.join(Constants.ASSETS_FOLDER, "balls", ball_name + ".png")
         images = ImageUtils.get_animation_frames_from_sprite_sheet(
             sheet_name=image_path,
-            cols=11
+            cols=8,
+            rows=1,
+            scale=0.7
         )
         self.height = images[0].get_height()
         self.width = images[0].get_width()

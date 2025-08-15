@@ -105,7 +105,7 @@ class ImagePackerUI(QMainWindow):
 
     def btn_get_source_clicked(self):
         file_dialog = QFileDialog()
-        #file_dialog.setFileMode(QFileDialog.FileMode.Directory)
+        file_dialog.setFileMode(QFileDialog.FileMode.Directory)
         clicked_button = file_dialog.exec()
         if clicked_button:
             selected_files = file_dialog.selectedFiles()

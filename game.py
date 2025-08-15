@@ -28,8 +28,12 @@ class Game:
         self.build_platforms()
 
         self.balls = []
-        self.balls.append(Ball(pygame.math.Vector2(Constants.WIDTH //2 - 100, 50),"blue"))
+        self.balls.append(Ball(pygame.math.Vector2(Constants.WIDTH // 2 - 100, 50),"blue"))
+        self.balls.append(Ball(pygame.math.Vector2(Constants.WIDTH // 2 - 100, 100), "red"))
+        self.balls.append(Ball(pygame.math.Vector2(Constants.WIDTH // 2 - 150, 80), "yellow"))
         self.sprite_groups["balls"].add(self.balls[0])
+        self.sprite_groups["balls"].add(self.balls[1])
+        self.sprite_groups["balls"].add(self.balls[2])
 
 
     def build_background_image(self):
