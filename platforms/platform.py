@@ -76,6 +76,10 @@ class Platform(pygame.sprite.Sprite):
         self.rect.x = self.position.x
         self.rect.y = self.position.y
 
+        # set rect smaller to stop player / ball from colliding next to sprite
+        self.rect.x += 10
+        self.rect.width -= 20
+
 
 
 

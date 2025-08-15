@@ -37,6 +37,10 @@ class PlayerBase(pygame.sprite.Sprite):
         self.rect.x = self.position.x
         self.rect.y = self.position.y
 
+        # Set rect a bit smaller so character does not hang in air next to platform
+        self.rect.x += 10
+        self.rect.width -= 20
+
     def move(self, dt):
 
         if self.acceleration.x > 0:

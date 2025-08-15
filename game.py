@@ -15,7 +15,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.sprite_groups = {
             "players": pygame.sprite.Group(),
-            "platforms": pygame.sprite.Group(),
+            "platforms": pygame.sprite.Group()
         }
 
         self.players = []
@@ -83,7 +83,6 @@ class Game:
         self.draw_background(self.screen)
 
         self.sprite_groups["platforms"].draw(self.screen)
-
         self.sprite_groups["players"].draw(self.screen)
 
         pygame.display.flip()
@@ -96,7 +95,17 @@ class Game:
             self.handle_keys()
             for player in self.players:
                 player.move(dt)
+
             self.sprite_groups["players"].update()
+
+            for player in self.players:
+                hits = pygame.sprite.spritecollide(player, self.sprite_groups["platforms"], False)
+                if hits and player.velocity.y > 0:
+
+                    player.position.y = hits[0].rect.top + 1 - player.rect.height
+                    player.velocity.y = 0
+                    player.on_ground = True
+
 
             self.draw()
 
