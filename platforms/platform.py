@@ -1,30 +1,11 @@
 import pygame
 
+from platforms.platform_base import PlatformBase
 from utils.image_utils import ImageUtils
 
+class Platform(PlatformBase):
 
-class Platform(pygame.sprite.Sprite):
-    def __init__(
-            self,
-            position: pygame.math.Vector2,
-            length: int = 0,
-            is_moving: bool = False,
-            move_range: int = 0,
-            move_speed: float = 0.5
-    ) -> None:
-
-        super().__init__()
-
-        self.position = position
-        self.length = max(3, length)
-        self.is_moving = is_moving
-        self.move_range = move_range
-        self.move_speed = move_speed
-
-        self.image = None
-        self.rect = None
-
-    def set_image(
+    def set_images(
             self,
             sheet_name: str,
             tile_width: int,
@@ -38,7 +19,7 @@ class Platform(pygame.sprite.Sprite):
         width = tile_width * scale
         height = tile_height * scale
 
-        left_image = ImageUtils.get_image_from_sprite_sheet(
+        self.left_image = ImageUtils.get_image_from_sprite_sheet(
             sheet_name,
             left_image_pos.x,
             left_image_pos.y,
@@ -46,7 +27,7 @@ class Platform(pygame.sprite.Sprite):
             left_image_pos.y + tile_height,
             scale)
 
-        center_image = ImageUtils.get_image_from_sprite_sheet(
+        self.center_image = ImageUtils.get_image_from_sprite_sheet(
             sheet_name,
             center_image_pos.x,
             center_image_pos.y,
@@ -54,7 +35,7 @@ class Platform(pygame.sprite.Sprite):
             center_image_pos.y + tile_height,
             scale)
 
-        right_image = ImageUtils.get_image_from_sprite_sheet(
+        self.right_image = ImageUtils.get_image_from_sprite_sheet(
             sheet_name,
             right_image_pos.x,
             right_image_pos.y,
@@ -62,26 +43,4 @@ class Platform(pygame.sprite.Sprite):
             right_image_pos.y + tile_height,
             scale)
 
-        self.image = pygame.Surface((width * self.length, height), pygame.SRCALPHA)
-        self.rect = self.image.get_rect()
-        for i in range(self.length):
-            image = center_image
-            if i == 0:
-                image = left_image
-            elif i == self.length-1:
-                image = right_image
-
-            self.image.blit(image, (i * width, 0))
-
-        self.rect.x = self.position.x
-        self.rect.y = self.position.y
-
-        # set rect smaller to stop player / ball from colliding next to sprite
-        self.rect.x += 10
-        self.rect.width -= 20
-
-
-
-
-
-
+        super().build_image()

@@ -23,17 +23,12 @@ class Game:
         self.sprite_groups["players"].add(self.players[0])
         self.background_image = None
         self.build_background_image()
+        self.build_platforms()
 
-        platform = Platform(pygame.math.Vector2(400, 450), 4)
-        platform.set_image(
-            os.path.join("assets", "terrain", "terrain.png"),
-            128, 128,
-            pygame.math.Vector2(0, 384),
-            pygame.math.Vector2(128, 384),
-            pygame.math.Vector2(256, 384),
-            0.5)
 
-        self.sprite_groups["platforms"].add(platform)
+
+
+
 
     def build_background_image(self):
         self.background_image = pygame.Surface((self.screen.get_width(), self.screen.get_height()))
@@ -97,6 +92,7 @@ class Game:
                 player.move(dt)
 
             self.sprite_groups["players"].update()
+            self.sprite_groups["platforms"].update()
 
             for player in self.players:
                 hits = pygame.sprite.spritecollide(player, self.sprite_groups["platforms"], False)
@@ -106,6 +102,45 @@ class Game:
                     player.velocity.y = 0
                     player.on_ground = True
 
+                    if hasattr(hits[0], 'is_moving') and hits[0].is_moving:
+                        player.position.x += hits[0].current_moving_speed
+
 
             self.draw()
+
+    def build_platforms(self):
+
+        platform = Platform(pygame.math.Vector2(75, 450), 4)
+        platform.set_images(
+            os.path.join("assets", "terrain", "terrain.png"),
+            128, 128,
+            pygame.math.Vector2(0, 384),
+            pygame.math.Vector2(128, 384),
+            pygame.math.Vector2(256, 384),
+            0.5)
+
+        self.sprite_groups["platforms"].add(platform)
+
+        platform = Platform(pygame.math.Vector2(625,  450), 4)
+        platform.set_images(
+            os.path.join("assets", "terrain", "terrain.png"),
+            128, 128,
+            pygame.math.Vector2(0, 384),
+            pygame.math.Vector2(128, 384),
+            pygame.math.Vector2(256, 384),
+            0.5)
+
+        self.sprite_groups["platforms"].add(platform)
+
+        platform = Platform(pygame.math.Vector2(150,  250), 6, is_moving=True, move_range=325, move_speed=1)
+        platform.set_images(
+            os.path.join("assets", "terrain", "terrain.png"),
+            128, 128,
+            pygame.math.Vector2(0, 384),
+            pygame.math.Vector2(128, 384),
+            pygame.math.Vector2(256, 384),
+            0.5)
+
+        self.sprite_groups["platforms"].add(platform)
+
 
