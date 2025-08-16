@@ -8,11 +8,11 @@ from utils.image_utils import ImageUtils
 
 class Player(PlayerBase):
 
-    def __init__(self, name: str, position: pygame.math.Vector2) -> None:
+    def __init__(self, name, asset_name: str, position: pygame.math.Vector2) -> None:
 
         super().__init__(name, position)
 
-        self.load_animations(name)
+        self.load_animations(asset_name)
         self.set_animation_active("idle_right")
 
     def load_animations(self, player_folder):
@@ -79,14 +79,3 @@ class Player(PlayerBase):
             base_animation = "jump"
 
         self.set_animation_active(base_animation + '_' + self.direction)
-
-
-
-
-
-
-
-
-
-
-

@@ -1,4 +1,4 @@
 class BallConstants:
 
-    BALL_SPEED = 5
+    BALL_SPEED = 3
     GROUND_HEIGHT = 640

@@ -5,11 +5,14 @@ import random
 from constants import Constants
 from utils.image_utils import ImageUtils
 from balls.ball_constants import BallConstants
+from game_state import GameState
+
 
 class Ball(pygame.sprite.Sprite):
 
-    def __init__(self, position: pygame.math.Vector2, color: str) -> None:
+    def __init__(self, game_state: GameState, position: pygame.math.Vector2, color: str) -> None:
         super().__init__()
+        self.game_state = game_state
         self.position = position
         self.velocity = pygame.math.Vector2(0, 0)
         self.color = color
@@ -22,9 +25,6 @@ class Ball(pygame.sprite.Sprite):
         self.rect = None
         self.height = 0
         self.width = 0
-
-        # self.velocity = pygame.Vector2(random.choice([-BallConstants.BALL_SPEED, BallConstants.BALL_SPEED]),
-        #                                random.choice([10, BallConstants.BALL_SPEED]))
 
         vel_x = random.choice([-BallConstants.BALL_SPEED, BallConstants.BALL_SPEED])
         vel_y = random.choice([-BallConstants.BALL_SPEED, BallConstants.BALL_SPEED])
