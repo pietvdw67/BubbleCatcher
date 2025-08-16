@@ -9,12 +9,12 @@ from utils.image_utils import ImageUtils
 from platforms.platform import Platform
 from balls.ball import Ball
 
-pygame.font.init()
-
+pygame.init()
 
 class Game:
 
     SCORE_FONT = pygame.font.SysFont("comicsans", 30)
+    MUSIC = pygame.mixer.music.load(os.path.join('assets', 'audio','music.mp3'))
 
     def __init__(self, screen, game_state):
         self.screen = screen
@@ -33,6 +33,10 @@ class Game:
         self.game_state.balls.append(Ball(self.game_state, pygame.math.Vector2(Constants.WIDTH // 2 - 150, 100), "red"))
         self.game_state.sprite_groups["balls"].add(self.game_state.balls[0])
         self.game_state.sprite_groups["balls"].add(self.game_state.balls[1])
+
+        pygame.mixer.music.set_volume(0.3)
+        pygame.mixer.music.play(-1, 0, 0)
+        Constants.JUMP_AUDIO.set_volume(0.5)
 
     def build_background_image(self):
         self.background_image = pygame.Surface((self.screen.get_width(), self.screen.get_height()))
@@ -154,14 +158,17 @@ class Game:
                 if hits:
                     if hits[0].color == "blue":
                         self.game_state.score_left += 1
+                        Constants.COIN_AUDIO.play()
                     if hits[0].color == "red":
                         self.game_state.score_right += 1
+                        Constants.COIN_AUDIO.play()
 
                     if hits[0].color == "yellow":
                         if player.name == "left":
                             self.game_state.score_left += 5
                         else:
                             self.game_state.score_right += 5
+                        Constants.COIN_AUDIO.play()
 
                     for ball in self.game_state.balls[:]:
                         if ball.color == hits[0].color:

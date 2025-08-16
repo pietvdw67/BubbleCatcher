@@ -71,6 +71,8 @@ class PlayerBase(pygame.sprite.Sprite):
             self.velocity.y = PlayerConstants.PLAYER_JUMP_STRENGTH
             self.on_ground = False
 
+            Constants.JUMP_AUDIO.play()
+
     def set_animation_active(self, active_name):
         if not self._animation_active_previous:
             self._animation_active_previous = active_name
